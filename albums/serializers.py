@@ -1,9 +1,9 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 from .models import Album
 
-
-class AlbumSerializer(serializers.ModelSerializer):
-
+class AlbumSerializer(ModelSerializer):
     class Meta:
         model = Album
         fields = '__all__'
+
+    

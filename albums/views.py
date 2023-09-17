@@ -1,23 +1,21 @@
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from albums.models import Album
+from rest_framework.viewsets import ModelViewSet
 
 from .serializers import (
     AlbumSerializer,
 )
-from .models import Album
-
 class AlbumView(ModelViewSet):
     serializer_class = AlbumSerializer
-
-    def get_queryset(self):
-        return Album.objects.all()
+    queryset = Album.objects.all()
 
     def list(self, request):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, *args, **kwargs):
-        serializer = AlbumSerializer(data=request.data)
+        albums = self.get_queryset()
+        serializer = self.get_serializer(albums, many=True)
+        return Response(serializer.data ,status=200)
+    
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return Response(serializer.data)
+        serializer.save()
+        return Response(serializer.data, status=201)
